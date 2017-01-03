@@ -1,0 +1,11 @@
+name: indep-study
+type: pdf
+source_files:
+  - head.md
+  - indep-study.md
+  - tail.md
+depends: []
+filters:
+  - pandoc-citeproc
+buildOpts:
+  - '--self-contained'
