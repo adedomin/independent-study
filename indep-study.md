@@ -136,15 +136,18 @@ Unlike other scripting languages like Perl and Python, NodeJS will allow a user 
 This means a user does not need to use *virtual envrionments* to prevent installing dependencies globally.
 This system also allows for a user to have projects that use different library versions, without worrying about conflict.
 
-JavaScript is entirely backwards compatible.
 Unlike the transition from Python 2.x to Python 3.x, JavaScript ECMA6 and ECMA5 are completely backwards compatible.
-The advantage of this is that users of JavaScript do not need to worry about communities splitting by newer javascript releases.
+The advantage of this is that users of JavaScript do not need to worry about communities splitting by newer JavaScript releases.
+Even methods which are considered bad practice, like *with()*--a function from very early versions of JavaScript, are still in the language.
 
 An example is CommonJS;
 CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code.
 
 Browserify is a tool that takes it a step further.
 It takes all of these module require() calls, finds NodeJS specific library functions and reserved words, and creates a bundled JavaScript file, with all the polyfills and libraries required, in one source file that can be included using one \<script src="index.bundle.js"\>\</script\> tag.
+This completely revolutionized front-end web development as it allowed users to make modules that are truly platform independent.
+Combine this with browserify's transformation streams and one can convert and bundle NodeJS source to target other JavaScript engines like GJS--GNOME bindings for JavaScript.
+Lastly, users can use this to bundle NodeJS programs into one executable source file.
 
 
 3. Objectives
