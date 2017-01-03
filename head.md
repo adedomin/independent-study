@@ -14,7 +14,7 @@
 #    pandoc 
 #    pandoc-citeproc
 
-title: "undecided"
+title: "AutomateJS: CICD and CM Tool"
 abstract: |
     *To be written.*
 
@@ -26,7 +26,7 @@ header-includes:
 - \hyphenpenalty 10000
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
-- \fancyfoot[L]{DeDominic - undet}
+- \fancyfoot[L]{DeDominic - AutomateJS}
 - \fancyfoot[C]{Independent Study - \the\year}
 - \fancyfoot[R]{\thepage}
 - \author{DeDominic, Anthony\\Eastern Connecticut State University\\Willimantic, USA\\dedominica@my.easternct.edu}
