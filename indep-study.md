@@ -19,9 +19,16 @@
 
 Given the fast paced world of information technology, there aren't many cross platform tools to automate deployment, manage and maintenance of infrastructure.
 
-Most operating systems offer basic UIs through remote shells.
-The problem with this is that remote shells usually lack the power to affect complex change.
-They are also potentially limited by lack of tools available.
+Tools like Ansible have come a far way to bridge this problem.
+However, the moderate complexity and requirements to create and utilize Ansible modules make it difficult to extend it beyond it's standard base.
+This problem exists because managing foreign dependencies in Python require things like a virtualenv.
+One must also include the Ansible library to process the arguments in the module.
+
+Prior to tools like Ansible, users were leveraging shells to automate server tasks.
+This is because most operating systems offer basic UIs through remote shells.
+These UIs give a user the ability to affect change on a system.
+However, shells have various portibility issues;
+utilities that may be on one server, may not exist on another server.
 
 Many of the coreutils in shells are built around processing and modifying line oriented data--tools like: sed, grep, paste, cut, tr, xargs, etc.
 However such tools make it difficult to work with more modern configuration files and service oriented architecture.
@@ -48,8 +55,27 @@ Even more complex projects like Ansible Tower add UIs and charts to ansible to m
 Puppet is a tool that is very similar to Ansible, however puppet is dependent on a backend service--like Foreman, to function properly.
 For the most part, Ansible is slowly supplanting Puppet from the space.
 
+### 1.1.3. Package Managers
+
+GNU/Linux distributions leverage package management tools to simplify the process of installing applications.
+Many of these tools work similar to the above.
+They contain files that should be deployed and a runbook to execute what is being installed.
+
+The problem however, is that these tools are designed for more generic software installations.
+They usually deploy very basic configurations and setups that may require modification.
+Not only that, but many of these tools require root privileges to function properly; this can greatly hinder users who do not have such privileges, but must deploy certain software.
+Package manager packages are usually inflexible about where they install software, generally discouraging local dynamic linking or statically linked binaries.
+Package management tools were made prior to more modern continuous integration tools; this usually makes these tools more complex to use.
+Probably the largest issue though, is general portability.
+Every GNU/Linux distribution, even if they use the same package manager tool, can have wildly different names for the same set of software;
+one GNU/Linux distribution could provide postfix as postfix-smtp, another could provided is as postfix-server and another could simply provide it as postfix.
+
+
 2. Background
 =============
+
+This section is concerned with providing more detail on the problem domain being solved with this tool.
+It will also briefly describe the technologies which enable this tool to function and why they matter.
 
 2.1. Continuous Integration and Continuous Deployment
 -----------------------------------------------------
@@ -101,4 +127,57 @@ It might not matter if it is dynamic as the cleanliness of the system.
 2.2. JavaScript, NodeJS and other Technologies
 -----------------------------------------------
 
+JavaScript is a unique language.
+Not only is it finding uses as a general scripting language, thanks to run-times like NodeJS, it is also the only language for front-end web development.
+Because web environments have different standard library features compared to NodeJS, web developers have created tools to bridge the gap between the various JavaScript environments.
 
+NodeJS uses a more modern, though potentially wasteful in some ways, dependency management system.
+Unlike other scripting languages like Perl and Python, NodeJS will allow a user to package their dependencies either locally to the program, or globally.
+This means a user does not need to use *virtual envrionments* to prevent installing dependencies globally.
+This system also allows for a user to have projects that use different library versions, without worrying about conflict.
+
+JavaScript is entirely backwards compatible.
+Unlike the transition from Python 2.x to Python 3.x, JavaScript ECMA6 and ECMA5 are completely backwards compatible.
+The advantage of this is that users of JavaScript do not need to worry about communities splitting by newer javascript releases.
+
+An example is CommonJS;
+CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code.
+
+Browserify is a tool that takes it a step further.
+It takes all of these module require() calls, finds NodeJS specific library functions and reserved words, and creates a bundled JavaScript file, with all the polyfills and libraries required, in one source file that can be included using one \<script src="index.bundle.js"\>\</script\> tag.
+
+
+3. Objectives
+=============
+
+The primary goal is to build a new Continuous Deployment and Configuration Management tool which rivals tools like Ansible.
+The idea is to leverage the strengths of JavaScript, NodeJS and utilities like browserify to accomplish this.
+Once a tool is developed, the goal is to build example deployment and configuration management runbooks to determine its suitability.
+
+4. Results
+==========
+
+4.1. jscomposer
+---------------
+
+This is the tool that generates source code.
+
+4.2. automatejs
+---------------
+
+This is the tool that templates runbooks, parses them and deploys them to hosts
+
+4.3. automatejs-core
+--------------------
+
+This is the core modules available to users without implicitly requiring them.
+
+4.4. Usage Examples
+-------------------
+
+example usages
+
+5. Discussion
+=============
+
+Discussion section.
