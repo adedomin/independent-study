@@ -160,18 +160,22 @@ Once a tool is developed, the goal is to build example deployment and configurat
 4. Results
 ==========
 
+This section will concern itself with features of the tool, AutomateJS, how it works and how it compares with Ansible.
+
 4.1. jscomposer
 ---------------
 
 The function jscomposer is what generates the code automatejs uses.
-Code generation in this way better suits how automatejs works.
-This is because the code is not executed at run-time.
+Code generation, in this way, better suits how automatejs works.
+This is because the code is not executed by the tool, but by the target hosts.
 
 The advantage jscomposer has over how ansible code generates is that it gives users control on the flow of execution.
 Users can use the native jscomposer modules like parallel and serial to dictate strictly how to execute the code.
 This is unlike ansible which requires users to use pre, post, tasks and handlers to give a similar benefit.
 
-Below is an example of 
+Below is an example of how one can use jscomposer to create a JavaScript file that will install ezios[^ezios-loc]--a web application available on npm.
+
+[^ezios-loc]: More info at: <https://github.com/GeneralUnRest/ezios>
 
 ```yaml
 # flow control
