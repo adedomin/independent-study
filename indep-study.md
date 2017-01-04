@@ -163,7 +163,68 @@ Once a tool is developed, the goal is to build example deployment and configurat
 4.1. jscomposer
 ---------------
 
-This is the tool that generates source code.
+The function jscomposer is what generates the code automatejs uses.
+Code generation in this way better suits how automatejs works.
+This is because the code is not executed at run-time.
+
+The advantage jscomposer has over how ansible code generates is that it gives users control on the flow of execution.
+Users can use the native jscomposer modules like parallel and serial to dictate strictly how to execute the code.
+This is unlike ansible which requires users to use pre, post, tasks and handlers to give a similar benefit.
+
+Below is an example of 
+
+```yaml
+# flow control
+# install app example
+tasks:
+- name: 'install app'
+  serial:
+  - name: 'create user'
+    shell: 'useradd -m ezios'
+  - name: 'create db path'
+    shell: > 
+      mkdir -p /home/ezios/.local/var/db/ezios;
+      chown -R ezios /home/ezios/.local;
+  - name: 'install app/configs'
+    parallel:
+    - name: 'install application'
+      shell: 'npm install -g ezios'
+    - name: 'configure applcation'
+      template:
+        source: ezios.config.js
+        destination: /home/ezios/.mon.js
+        variables:
+          db_path: '/home/ezios/.local/var/db/ezios'
+          api_key: 'a secret key =]'
+    - name: 'create service'
+      systemd-helper/create:
+        service_name: 'ezios'
+        description: 'ezios: monitoring tool'
+        user: 'ezios'
+        exec: '/usr/bin/monjs start'
+        service_extra:
+        - 'WorkingDirectory=/home/ezios'
+  - name: 'start ezios'
+    shell: > 
+      systemd reload-daemon;
+      systemd enable ezios.service;
+      systemd start ezios.service
+```
+
+Currently, there are limited modules in automatejs which is why the shell module[^on-shell-mod] is used so much.
+However, this example demonstrates what can be accomplished with automatejs.
+Unlike a pure shell script, for instance, there is no easy mechanism to fill out templates in shells.
+This alone makes it superior.
+It is also purely asynchronous, so while the configuration is being written, the npm module could be downloading and installing a server application, called ezios.
+
+[^on-shell-mod]: Note that the shell module is highly unlikely to be portable between windows and linux systems, hoever portable replacements can be made by the community.
+
+Systemd-helper is another module which creates service files.
+It was designed to be used as a standalone command-driven module, but because of how simple automatejs's plugin system is, a simple callack function like systemd-helper/create.js can be leveraged directly.
+
+As explained, serial and parallel modules that are built into jscomposer give a higher level control of the flow of execution. 
+This allows for crucial tasks, like creating the user and the directory to be done before anything is installed.
+Contrast this with the use of pre-tasks and post-tasks in other tools like automatejs.
 
 4.2. automatejs
 ---------------
