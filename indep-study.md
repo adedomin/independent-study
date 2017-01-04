@@ -217,7 +217,7 @@ Unlike a pure shell script, for instance, there is no easy mechanism to fill out
 This alone makes it superior.
 It is also purely asynchronous, so while the configuration is being written, the npm module could be downloading and installing a server application, called ezios.
 
-[^on-shell-mod]: Note that the shell module is highly unlikely to be portable between windows and linux systems, hoever portable replacements can be made by the community.
+[^on-shell-mod]: Note that the shell module is highly unlikely to be portable between Windows and GNU/Linux systems, however portable replacements can be made by the community.
 
 Systemd-helper is another module which creates service files.
 It was designed to be used as a standalone command-driven module, but because of how simple automatejs's plugin system is, a simple callack function like systemd-helper/create.js can be leveraged directly.
