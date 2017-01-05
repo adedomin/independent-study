@@ -148,7 +148,16 @@ However, NodeJS--and the many libraries built for it, utilize a module system si
 To port this advantageous module system to the web, CommonJS was created.
 CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code[^import-ecma6].
 
-[^import-ecma6]: As of ECMA6, the *import* semantic is the preferred, universal, module system.
+[^import-ecma6]: As of ECMAScript 6, the *import* semantic is the preferred, universal, module system.
+
+```javascript
+// module system in NodeJS, pre import
+var module_name = require('module-name')
+// new ECMAScript 6 way
+import * as module_name from 'module-name'
+```
+
+The above shows an example of the module system.
 
 Browserify is a tool that takes CommonJS a step further.
 It takes all of these module require() calls, finds NodeJS specific library functions and reserved words, and creates a bundled JavaScript file, with all the polyfills and libraries required, in one source file that can be included using one \<script src="index.bundle.js"\>\</script\> tag.
