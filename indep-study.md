@@ -17,43 +17,49 @@
 1. Introduction
 ===============
 
-Given the fast paced world of information technology, there aren't many cross platform tools to automate deployment, manage and maintenance of infrastructure.
+Technology is only moving faster.
+New industry practices like Continuous Integration and Continuous Deployment, Development Operations and Agile workflow require more consistent automation.
+Many tools have been made, but usually come with caveats.
+Some have challenges controlling the order of execution, other are coupled to a centralized inventory management service.
+However, usually all of them have advantages over shell scripts and other automation tools.
 
-Tools like Ansible have come a far way to bridge this problem.
-However, the moderate complexity and requirements to create and utilize Ansible modules make it difficult to extend it beyond it's standard base.
+Shell scripting is usually the most natural way of automating operating system provisioning and management.
+The shell is usually the most basic UI to control a system.
+However, shells are generally not portable.
+For instance, some servers may have tools and utilities available that another server does not.
+That means a shell script that uses a tool like *sponge* will not work--or at least not in the same way, on machines that do not have *sponge* installed.
+
+There are various other problems with shells.
+Consider GNU coreutils for Linux distributions, for instance.
+These coreutils are basically guaranteed to exist on almost any GNU/Linux distribution.
+However, most coreutils tools are built around processing and modifying line oriented data only--tools like: sed, grep, paste, cut, tr, xargs, etc.
+Such tools have difficultly working with more modern configuration files or services which leverage complex data structures--for instance, JSON or YAML configuration files.
+As explained above, leveraging more non-standard tools--tools like jq which process JSON documents for shells, may make the script non-portable.
+Portability concerns, and shortfalls in shells and coreutils, have driven developers to create newer tools using scripting languages, like Python.
+
+Ansible is an example of a modern automation tool.
+It is built using python, trying to only leverage the python standard library.
+However, the moderate complexity and requirements to create and utilize Ansible modules make it difficult to extend it beyond its standard base.
 This problem exists because managing foreign dependencies in Python require things like a virtualenv.
-One must also include the Ansible library to process the arguments in the module.
-
-Prior to tools like Ansible, users were leveraging shells to automate server tasks.
-This is because most operating systems offer basic UIs through remote shells.
-These UIs give a user the ability to affect change on a system.
-However, shells have various portibility issues;
-utilities that may be on one server, may not exist on another server.
-
-Many of the coreutils in shells are built around processing and modifying line oriented data--tools like: sed, grep, paste, cut, tr, xargs, etc.
-However such tools make it difficult to work with more modern configuration files and service oriented architecture.
-Because of this, many common automation tools leverage powerful scripting languages, like python.
-This is because unlike most shells, scripting languages usually have facilities and datastructures for handling tree objects and various other common data structures.
-
-tools have been made that leverage standard libraries in scripting languages: Puppet, Chef, Ansible, Salt Stack and many others.
-These tools exist to turn lisp-like abstract syntax trees and compose collections of functions, or modules, into executable jobs.
+One must also include the Ansible library in the module to process the arguments in the module.
 
 1.1. Related Works
 ------------------
 
 ### 1.1.1. Ansible
 
-Ansible is one of the popular tools in the space.
-It leverages Python--and Powershell for Windows, to create a full automation framework.
+Ansible is one of the most popular tools in the space.
+This is because unlike its predecessors, Ansible uses an agentless[^agentless] architecture.
+Thus Ansible can work on any GNU/Linux machine running an SSH daemon and have Python 2.x installed.
+Ansible, like other tools in the space, uses a playbook to orchestrate what modules to run on what machines.
+An inventory file, in an INI file format, tell Ansible what group of servers are associated with a particular label.
 
-Because of ansible's popularity, but also its shortcomings, many projects were built around ansible.
-Examples are projects like loopabull which add web technology to ansible to make it responsive to events.
-Even more complex projects like Ansible Tower add UIs and charts to ansible to make it more user friendly.
+[^agentless]: Agentless means that when an Ansible playbook is not being executed on a target machine, the machine does not waste resources running Ansible in the background.
 
 ### 1.1.2. Puppet
 
 Puppet is a tool that is very similar to Ansible, however puppet is dependent on a backend service--like Foreman, to function properly.
-For the most part, Ansible is slowly supplanting Puppet from the space.
+For the most part, Ansible is slowly supplanting Puppet from the CI space.
 
 ### 1.1.3. Package Managers
 
@@ -61,7 +67,9 @@ GNU/Linux distributions leverage package management tools to simplify the proces
 Many of these tools work similar to the above.
 They contain files that should be deployed and a runbook to execute what is being installed.
 
-The problem however, is that these tools are designed for more generic software installations.
+These tools are designed for more generic software installations;
+it becomes difficult to leverage package management for more custom software.
+Packages can also be older than the newest release, primarily for stability reasons.
 They usually deploy very basic configurations and setups that may require modification.
 Not only that, but many of these tools require root privileges to function properly; this can greatly hinder users who do not have such privileges, but must deploy certain software.
 Package manager packages are usually inflexible about where they install software, generally discouraging local dynamic linking or statically linked binaries.
@@ -69,7 +77,6 @@ Package management tools were made prior to more modern continuous integration t
 Probably the largest issue though, is general portability.
 Every GNU/Linux distribution, even if they use the same package manager tool, can have wildly different names for the same set of software;
 one GNU/Linux distribution could provide postfix as postfix-smtp, another could provided is as postfix-server and another could simply provide it as postfix.
-
 
 2. Background
 =============
@@ -128,27 +135,34 @@ It might not matter if it is dynamic as the cleanliness of the system.
 -----------------------------------------------
 
 JavaScript is a unique language.
-Not only is it finding uses as a general scripting language, thanks to run-times like NodeJS, it is also the only language for front-end web development.
-Because web environments have different standard library features compared to NodeJS, web developers have created tools to bridge the gap between the various JavaScript environments.
+Not only is it finding uses as a general scripting language, thanks to run-times like NodeJS, it is also the only language for front-end web development;
+this leads to some unique issues.
+Web browsers, for instance, provide different application programming interfaces and library functions than NodeJS.
+To try to tie the environments together, JavaScript developers built tools and wrappers, called polyfills.
 
-NodeJS uses a more modern, though potentially wasteful in some ways, dependency management system.
-Unlike other scripting languages like Perl and Python, NodeJS will allow a user to package their dependencies either locally to the program, or globally.
-This means a user does not need to use *virtual envrionments* to prevent installing dependencies globally.
-This system also allows for a user to have projects that use different library versions, without worrying about conflict.
+### 2.2.1. JavaScript Modules Systems
+
+One common polyfill found in many JavaScript front-ends is a module system, since web browsers never needed one.
+This is because \<script\>\</script\> tags were considered good enough.
+However, NodeJS--and the many libraries built for it, utilize a module system since a server would not have these script tags.
+To port this advantageous module system to the web, CommonJS was created.
+CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code[^import-ecma6].
+
+[^import-ecma6]: As of ECMA6, the *import* semantic is the preferred, universal, module system.
+
+Browserify is a tool that takes CommonJS a step further.
+It takes all of these module require() calls, finds NodeJS specific library functions and reserved words, and creates a bundled JavaScript file, with all the polyfills and libraries required, in one source file that can be included using one \<script src="index.bundle.js"\>\</script\> tag.
+This completely revolutionized front-end web development as it allowed users to make modules that are truly platform independent.
+Combine this with browserify's transformation streams and one can convert and bundle NodeJS source to target other JavaScript engines like GJS--GNOME bindings for JavaScript.
+
+The push to create portable JavaScript has evolved the language dramatically.
+It had also created a flood of tools and libraries that make it a suitable language to make an automation framework with, like Ansible.
+
+### 2.2.2. JavaScript Backwards Compatibility
 
 Unlike the transition from Python 2.x to Python 3.x, JavaScript ECMA6 and ECMA5 are completely backwards compatible.
 The advantage of this is that users of JavaScript do not need to worry about communities splitting by newer JavaScript releases.
 Even methods which are considered bad practice, like *with()*--a function from very early versions of JavaScript, are still in the language.
-
-An example is CommonJS;
-CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code.
-
-Browserify is a tool that takes it a step further.
-It takes all of these module require() calls, finds NodeJS specific library functions and reserved words, and creates a bundled JavaScript file, with all the polyfills and libraries required, in one source file that can be included using one \<script src="index.bundle.js"\>\</script\> tag.
-This completely revolutionized front-end web development as it allowed users to make modules that are truly platform independent.
-Combine this with browserify's transformation streams and one can convert and bundle NodeJS source to target other JavaScript engines like GJS--GNOME bindings for JavaScript.
-Lastly, users can use this to bundle NodeJS programs into one executable source file.
-
 
 3. Objectives
 =============
