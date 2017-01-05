@@ -179,7 +179,7 @@ Once a tool is developed, the goal is to build example deployment and configurat
 AutomateJS should have a system which allows a user to dynamically create or *npm install*[^npm-install] modules.
 This is to contrast it from prior works which have more complex dependency mechanisms, making it hard to develop and utilize prior works.
 
-[npm-install]: This is a command which a user would use to include dependencies from <http://npmjs.com> in a project.
+[^npm-install]: This is a command which a user would use to include dependencies from <http://npmjs.com> in a project.
 
 ### 3.1.2. Controllable Flow of Execution
 
