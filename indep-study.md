@@ -321,4 +321,8 @@ Basically the feature requires the user to provide a binary that takes host labe
 6. Conclusion
 =============
 
-dfsafdsfds
+Because of the limitations of shells and other OS tools and features, many automation tools were made.
+These tools were made to allow for building projects andaccelerated delivery of these projects to back-end services.
+AutomateJS adds some unique features over other tools in its space.
+It is able to execute a set of commands in a defined order.
+It modules use basic NodeJS conventions, making ti very eay to create or adapt prior works to be usable by AutomateJS.
