@@ -263,4 +263,45 @@ Ansible requires a little bit more, which requires the program to be aware of an
 5. Discussion
 =============
 
-Discussion section.
+Like many other tools before it, AutomateJS solves basic automation jobs.
+
+5.1. Related Works
+------------------
+
+AutomateJS has a few advantages over other tools in its space.
+Being made with composable modules and the power of NodeJS module system, 
+
+In terms of Ansible, AutomateJS makes it easier to create modules.
+As shown earlier, to make a valid module, it just has to implement a very basic function.
+Unlike Ansible though, AutomateJS does not have a large and encompassing set of standard modules.
+
+Package Managers are generally only limited to common, off the shelf software.
+In many cases, a user of AutomateJS may want to install certain software from these tools.
+
+5.2. Limitations
+----------------
+
+AutomateJS is lacking in many features.
+For instance, it doesn't have a dynamic inventory system like Ansible.
+The SSH transport is not as mature as Ansible.
+It depends on private key authentication only.
+It also doesn't work with sudo when a password is required, primarily because of the overhead of a pseudo-tty garbling output.
+
+The core modules are also lacking in features.
+The file module copies files, but does not give users the ability to set owner or mode of the file.
+This could be implemented however.
+Because this project has really started, many of the example scripts abuse the shell module, which is not much better than using shell scripts.
+
+Unlike Python, NodeJS is not a common package that comes pre-installed on many Linux or BSD installations.
+So unlike Ansible, to utilize AutomateJS, a user must ensure NodeJS is installed on the system.
+
+5.3. Next Steps
+---------------
+
+Because of the limitations, the next steps are to explore building a wrapper around Ansible.
+Because of Ansible's rich features and modules systems, it would be ideal to leverage that instead of re implementing all its features in AutomateJS.
+
+6. Conclusion
+=============
+
+dfsafdsfds
