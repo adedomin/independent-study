@@ -233,17 +233,32 @@ Contrast this with the use of pre-tasks and post-tasks in other tools like autom
 4.2. automatejs
 ---------------
 
-This is the tool that templates runbooks, parses them and deploys them to hosts
+AutomateJS is the core user interface for the program.
+It composes all the various tools and elements required to create and execute runbooks.
+Currently, the tool can take a list of variables, inventory files and a runbook to generate a JavaScript file.
+This JavaScript file can then be deployed using ssh to applicable hosts.
 
-4.3. automatejs-core
---------------------
+However, it lacks many features that Ansible has.
+For instance, Ansible can leverage web services for dynamic inventory.
+Ansible also has many more advanced features when it comes to protecting information that can be stored in variables and their playbooks.
 
-This is the core modules available to users without implicitly requiring them.
+4.3. Modules
+------------
 
-4.4. Usage Examples
--------------------
+Modules are probably the biggest enhancement over other tools.
+Virtually any asynchronous function works with AutomateJS.
+Modules are merely functions which accept a JavaScript object of arguments and a callback which has an error parameter and a result value.
 
-example usages
+```javascript
+// basic modules
+module.exports = (args, cb) => {
+    cb(null, args)
+}
+```
+
+Above demonstrates a perfectly valid module.
+This demonstrates the simplicity of the system.
+Ansible requires a little bit more, which requires the program to be aware of an arguments file or must leverage the Ansible python library.
 
 5. Discussion
 =============
