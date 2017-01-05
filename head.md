@@ -33,27 +33,53 @@ header-includes:
 
 link-citations: Yes
 references:
-- title: 'Caml-Shcaml: An OCaml Library for UNIX Shell Programming'
-  DOI: 10.1145/1411304.1411316
-  publisher: ACM
+
+
+- title: 'jcom: A JavaScript Object Shell'
+  URL: 'https://github.com/adedomin/CSC450-project-written/blob/master/final/CSC450-SEN-dedominica.pdf'
   author:
-  - family: Heller
-    given: Alec
-  - family: Tov
-    given: Jesse
-  id: shcaml
+  - family: DeDominic
+    given: Anthony
+  id: jcom
   type: article-journal
   issued:
-    year: 2008
+    year: 2016
 
-- title: Monad Manifesto
-  URL: http://www.jsnover.com/Docs/MonadManifesto.pdf
-  publisher: Microsoft
+- title: Ansible Documentation
+  URL: 'http://docs.ansible.com/ansible'
+  publisher: Ansible
+  id: ansible
+
+- title: Introduction to browserify
+  URL: 'https://writingjavascript.org/posts/introduction-to-browserify#_=_'
   author:
-  - family: Snover
-    given: Jeffrey
+  - family: Vincent
+    given: Seth
+  id: browserify
   issued:
-    month: Aug
-    year: 2002
-  id: monadshell
+    year: 2017
+
+- title: Puppet Documentation
+  URL: 'https://docs.puppet.com/puppet/'
+  publisher: Puppet
+  id: puppet
+
+- title: 'Lessons from using Ansible exclusively for 2 years.'
+  URL: 'https://blog.serverdensity.com/what-ive-learnt-from-using-ansible-exclusively-for-2-years/'
+  author:
+  - family: Raun
+    given: Corban
+  id: lessons-ansible
+  issued:
+    year: 2015
+
+- title: 'Jenkins CI documentation'
+  URL: 'https://jenkins.io/doc/'
+  publisher: Jenkins
+  id: jenkins
+
+- title: 'Jenkins Plugins'
+  URL: 'https://plugins.jenkins.io/'
+  publisher: Jenkins
+  id: jenkins-plugins
 ---

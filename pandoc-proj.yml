@@ -4,8 +4,11 @@ source_files:
   - head.md
   - indep-study.md
   - tail.md
-depends: []
+depends:
+  - adedomin/ieee-with-doi-and-url
 filters:
   - pandoc-citeproc
 buildOpts:
   - '--self-contained'
+  - '--csl'
+  - './pandoc_modules/ieee-with-doi-and-url/ieee-doi-url.csl'

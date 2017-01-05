@@ -27,13 +27,13 @@ Shell scripting is usually the most natural way of automating operating system p
 The shell is usually the most basic UI to control a system.
 However, shells are generally not portable.
 For instance, some servers may have tools and utilities available that another server does not.
-That means a shell script that uses a tool like *sponge* will not work--or at least not in the same way, on machines that do not have *sponge* installed.
+That means a shell script that uses a tool like *sponge* will not work--or at least not in the same way, on machines that do not have *sponge* installed[@jcom].
 
 There are various other problems with shells.
 Consider GNU coreutils for Linux distributions, for instance.
 These coreutils are basically guaranteed to exist on almost any GNU/Linux distribution.
 However, most coreutils tools are built around processing and modifying line oriented data only--tools like: sed, grep, paste, cut, tr, xargs, etc.
-Such tools have difficultly working with more modern configuration files or services which leverage complex data structures--for instance, JSON or YAML configuration files.
+Such tools have difficultly working with more modern configuration files or services which leverage complex data structures--for instance, JSON or YAML configuration files[@jcom].
 As explained above, leveraging more non-standard tools--tools like jq which process JSON documents for shells, may make the script non-portable.
 Portability concerns, and shortfalls in shells and coreutils, have driven developers to create newer tools using scripting languages, like Python.
 
@@ -41,7 +41,7 @@ Ansible is an example of a modern automation tool.
 It is built using python, trying to only leverage the python standard library.
 However, the moderate complexity and requirements to create and utilize Ansible modules make it difficult to extend it beyond its standard base.
 This problem exists because managing foreign dependencies in Python require things like a virtualenv.
-One must also include the Ansible library in the module to process the arguments in the module.
+One must also include the Ansible library in the module to process the arguments in the module[@ansible].
 
 1.1. Related Works
 ------------------
@@ -52,14 +52,15 @@ Ansible is one of the most popular tools in the space.
 This is because unlike its predecessors, Ansible uses an agentless[^agentless] architecture.
 Thus Ansible can work on any GNU/Linux machine running an SSH daemon and have Python 2.x installed.
 Ansible, like other tools in the space, uses a playbook to orchestrate what modules to run on what machines.
-An inventory file, in an INI file format, tell Ansible what group of servers are associated with a particular label.
+An inventory file, in an INI file format, tell Ansible what group of servers are associated with a particular label [@ansible].
 
 [^agentless]: Agentless means that when an Ansible playbook is not being executed on a target machine, the machine does not waste resources running Ansible in the background.
 
 ### 1.1.2. Puppet
 
-Puppet is a tool that is very similar to Ansible, however puppet is dependent on a backend service--like Foreman, to function properly.
+Puppet is a tool that is very similar to Ansible, however puppet is dependent on a backend service--like Foreman, to function properly[@puppet].
 For the most part, Ansible is slowly supplanting Puppet from the CI space.
+This is due to variety of reasons, primarily because Ansible is agentless[@lessons-ansible].
 
 ### 1.1.3. Package Managers
 
@@ -75,6 +76,7 @@ Not only that, but many of these tools require root privileges to function prope
 Package manager packages are usually inflexible about where they install software, generally discouraging local dynamic linking or statically linked binaries.
 Package management tools were made prior to more modern continuous integration tools; this usually makes these tools more complex to use.
 Probably the largest issue though, is general portability.
+
 Every GNU/Linux distribution, even if they use the same package manager tool, can have wildly different names for the same set of software;
 one GNU/Linux distribution could provide postfix as postfix-smtp, another could provided is as postfix-server and another could simply provide it as postfix.
 
@@ -97,11 +99,11 @@ The source code repository is usually technologies like git, svn, cvs or other v
 The idea of the source code repository is to allow for efficient ways to handle code changes and to manage multiple developers working on the same code.
 
 Lastly, there is a server, running software similar to Jenkins CI or Travis CI which can potentially handle many tasks.
-At a high level, it is usually used to run a build or test step in, say, a build.gradle, project.json, Makefile or various other build tools.
+At a high level, it is usually used to run a build or test step in, say, a build.gradle, project.json, Makefile or various other build tools[@jenkins].
 To enhance tools like Jenkins, there are binary and other code quality scans like SonarQube and others which attempt to find issues outside of the space of unit and mock tests.
-Other such triggers, like diff checking, can be used to trigger code reviews for massive revisions of source code.
+Other such triggers, like diff checking, can be used to trigger code reviews for massive revisions of source code[@jenkins-plugins].
 
-Generally, the final stage of Continuous Integration is to notify the developers, or other interested parties, the results of these various tests and builds.
+Generally, the final stage of Continuous Integration is to notify the developers, or other interested parties, the results of these various tests and builds[@jenkins].
 In a full CICD build pipeline, generally there is the process of uploading so called artifacts to a artifact or binary repository.
 These binary repositories are more in the realm of continuous delivery.
 
@@ -111,14 +113,14 @@ For java based projects, there are things like nexus.
 Other languages, like python, have their own packaging sites;
 python for instance has PyPI.
 
-In order to deploy these binaries, many tools make use of remote shell protocols.
+In order to deploy these binaries, many tools make use of remote shell protocols[@ansible][@puppet][@jenkins].
 Remote shell protocols give tools access to execute the needed steps to get software deployed.
 Generally these tools run through scripts which make the machine require the needed binaries and create the needed configurations.
 The remote shells are no different than conventional user-controlled shells.
 
 There are various tools and servers that do this; a few examples are Ansible, uDeploy and Puppet.
-Ansible uses remote shell protocols, such as secure shell (ssh), to execute a set of instructions written in yaml, generally with the intent of installing some type of software.
-uDeploy is similar in how it causes change on target machines, using secure shell; however uDeploy generally requires the target machines to be running some kind of daemon.
+Ansible uses remote shell protocols, such as secure shell (ssh), to execute a set of instructions written in yaml, generally with the intent of installing some type of software[@ansible].
+uDeploy is similar in how it causes change on target machines, using secure shell; however uDeploy generally requires the target machines to be running some kind of daemon; this also means it is not strictly *agentless* like Ansible.
 
 Many POSIX-like systems make use of package management to deliver software.
 Packages, like .deb's and .rpm's, are a collection of installation shell scripts, including pre-installation and post-installation, and a binary or source code.
@@ -127,9 +129,9 @@ Part of their management requires tracking file locations. This allows for rolli
 
 Deployment strategy can be different depending on the available infrastructure.
 In an environment with fixed inventory, it might not be ideal to do things like \`make install\` which are hard to reverse.
-However in an environment where machines can be spun up at whim, or even automatically, it wouldn't matter as much; in such cases one would simply destroy and create a new machine for every deployment.
+However in an environment where machines can be spun up at whim, or even automatically, it wouldn't matter as much; in such cases one would simply destroy and create a new machine for every deployment[@lessons-ansible].
 In a fixed architecture, it might be ideal to stick to package management solutions for delivering binaries.
-It might not matter if it is dynamic as the cleanliness of the system.
+This way changes are cleanly tracked and handled using battle-tested tools and technologies.
 
 2.2. JavaScript, NodeJS and other Technologies
 -----------------------------------------------
@@ -162,7 +164,7 @@ The above shows an example of the module system.
 Browserify is a tool that takes CommonJS a step further.
 It takes all of these module require() calls, finds NodeJS specific library functions and reserved words, and creates a bundled JavaScript file, with all the polyfills and libraries required, in one source file that can be included using one \<script src="index.bundle.js"\>\</script\> tag.
 This completely revolutionized front-end web development as it allowed users to make modules that are truly platform independent.
-Combine this with browserify's transformation streams and one can convert and bundle NodeJS source to target other JavaScript engines like GJS--GNOME bindings for JavaScript.
+Combine this with browserify's transformation streams and one can convert and bundle NodeJS source to target other JavaScript engines like GJS--GNOME bindings for JavaScript[@browserify].
 
 The push to create portable JavaScript has evolved the language dramatically.
 It had also created a flood of tools and libraries that make it a suitable language to make an automation framework with, like Ansible.
@@ -196,6 +198,8 @@ Prior works in the space do not offer many constructs to handle execution depend
 Many depend on using pre and post execution tasks.
 To prevent multiple execution of the same tasks, some use handler mechanisms to notify the framework to execute that step once the main set of tasks are done.
 Ideally AutomateJS will allow for users to dictate which collection of modules must occur in order or can occur in parallel.
+
+In order to guarantee a proper flow of execution, many Ansible modules must be put in synchronous mode[@ansible]
 
 4. Results
 ==========
