@@ -313,6 +313,11 @@ So unlike Ansible, to utilize AutomateJS, a user must ensure NodeJS is installed
 Because of the limitations, the next steps are to explore building a wrapper around Ansible.
 Because of Ansible's rich features and modules systems, it would be ideal to leverage that instead of re implementing all its features in AutomateJS.
 
+Because AutomateJS does not have roles, a helper tool should be made that can turn a subset of tasks with variables, into a module that can be npm installed or required.
+
+Dynamic inventory should be a simple addition that could be made.
+Basically the feature requires the user to provide a binary that takes host label and outputs a json object.
+
 6. Conclusion
 =============
 
