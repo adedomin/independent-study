@@ -147,8 +147,9 @@ To try to tie the environments together, JavaScript developers built tools and w
 One common polyfill found in many JavaScript front-ends is a module system, since web browsers never needed one.
 This is because \<script\>\</script\> tags were considered good enough.
 However, NodeJS--and the many libraries built for it, utilize a module system since a server would not have these script tags.
+
 To port this advantageous module system to the web, CommonJS was created.
-CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code[^import-ecma6].
+CommonJS, or require.js, is a JavaScript tool that polyfills the require() function available on NodeJS and enabled browsers to have more modular code[^import-ecma6][@browserify].
 
 [^import-ecma6]: As of ECMAScript 6, the *import* semantic is the preferred, universal, module system.
 
