@@ -171,6 +171,23 @@ The primary goal is to build a new Continuous Deployment and Configuration Manag
 The idea is to leverage the strengths of JavaScript, NodeJS and utilities like browserify to accomplish this.
 Once a tool is developed, the goal is to build example deployment and configuration management runbooks to determine its suitability.
 
+3.1. Going Further
+------------------
+
+### 3.1.1. Easy Modules
+
+AutomateJS should have a system which allows a user to dynamically create or *npm install*[^npm-install] modules.
+This is to contrast it from prior works which have more complex dependency mechanisms, making it hard to develop and utilize prior works.
+
+[npm-install]: This is a command which a user would use to include dependencies from <http://npmjs.com> in a project.
+
+### 3.1.2. Controllable Flow of Execution
+
+Prior works in the space do not offer many constructs to handle execution dependencies.
+Many depend on using pre and post execution tasks.
+To prevent multiple execution of the same tasks, some use handler mechanisms to notify the framework to execute that step once the main set of tasks are done.
+Ideally AutomateJS will allow for users to dictate which collection of modules must occur in order or can occur in parallel.
+
 4. Results
 ==========
 
