@@ -269,7 +269,14 @@ Like many other tools before it, AutomateJS solves basic automation jobs.
 ------------------
 
 AutomateJS has a few advantages over other tools in its space.
-Being made with composable modules and the power of NodeJS module system, 
+Being made with composable modules and the power of NodeJS module system.
+It also offers a new feature, the ability to control the flow of execution.
+
+Unlike all of the tools in the space, jscomposer allows for AutomateJS to control the order of execution.
+Most other tools use pre-tasks, post-tasks and task segregation.
+However, this doesn't always work for all dependency related issues.
+jscomposer provides features like the serial module which means that the modules in it must be executed in order.
+The parallel module does the opposite allowing for tasks to be executed in any order.
 
 In terms of Ansible, AutomateJS makes it easier to create modules.
 As shown earlier, to make a valid module, it just has to implement a very basic function.
@@ -287,6 +294,11 @@ The SSH transport is not as mature as Ansible.
 It depends on private key authentication only.
 It also doesn't work with sudo when a password is required, primarily because of the overhead of a pseudo-tty garbling output.
 
+AutomateJS does not provide a handler mechanism like many other tools.
+Because tasks can be executed in a specific order, the mechanism may not be required.
+The other feature it is lacking is nested tasks;
+tools like Ansible call these roles, which are basically sub-playbooks with their own variables and modules.
+
 The core modules are also lacking in features.
 The file module copies files, but does not give users the ability to set owner or mode of the file.
 This could be implemented however.
@@ -295,8 +307,8 @@ Because this project has really started, many of the example scripts abuse the s
 Unlike Python, NodeJS is not a common package that comes pre-installed on many Linux or BSD installations.
 So unlike Ansible, to utilize AutomateJS, a user must ensure NodeJS is installed on the system.
 
-5.3. Next Steps
----------------
+5.3. Future Work
+----------------
 
 Because of the limitations, the next steps are to explore building a wrapper around Ansible.
 Because of Ansible's rich features and modules systems, it would be ideal to leverage that instead of re implementing all its features in AutomateJS.
