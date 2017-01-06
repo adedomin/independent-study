@@ -21,6 +21,7 @@ abstract: |
   *This paper is concerned with a new automation tool that attempts to directly compete with Ansible.*
   *It does this by having a module system that is easy to develop for, but also having tighter controls over the flow of execution.*
   *Automation frameworks could greatly benefit by implementing these features.*
+  *This is demonstrated by comparing AutomateJS to Ansible.*
 papersize: letter
 geometry: margin=2cm
 fontfamily: mathpazo
