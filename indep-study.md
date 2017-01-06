@@ -206,16 +206,20 @@ This is to contrast it from prior works which have more complex dependency mecha
 ### 3.1.2. Controllable Flow of Execution
 
 Prior works in the space do not offer many constructs to handle execution dependencies.
-Many depend on using pre and post execution tasks.
-To prevent multiple execution of the same tasks, some use handler mechanisms to notify the framework to execute that step once the main set of tasks are done.
-Ideally AutomateJS will allow for users to dictate which collection of modules must occur in order or can occur in parallel.
+Many depend on using pre and post execution tasks;
+This is to prevent dependency problems.
+Without this, many of these tools have to run in a slower, synchronous[^why-slow] mode.
+For instance, Ansible to guarantee the order of execution, many Ansible modules must be put in synchronous mode[@ansible].
 
-In order to guarantee a proper flow of execution, many Ansible modules must be put in synchronous mode[@ansible]
+[^why-slow]: Syncronous means that the tool has to wait for a task to fully complete before beginning another, which can be slower for I/O tasks; which may have to wait for the Operating System to read or write files.
+
+Ideally AutomateJS will allow for users to dictate which collection of modules must occur in order or can occur in parallel, whether they are asynchronous or not.
 
 4. Results
 ==========
 
-This section will concern itself with features of the tool, AutomateJS, how it works and how it compares with Ansible.
+This section will concern itself with features of the tool, AutomateJS, how it works.
+If it is applicable, it will compare it to Ansible.
 
 4.1. Runbooks
 -------------
@@ -400,7 +404,7 @@ As explained, serial and parallel modules that are built into jscomposer give a 
 This allows for crucial tasks, like creating the user and the directory to be done before anything is installed.
 Contrast this with the use of pre-tasks and post-tasks in other tools like automatejs.
 
-4.2. automatejs
+4.3. automatejs
 ---------------
 
 AutomateJS is the core user interface for the program.
@@ -412,7 +416,7 @@ However, it lacks many features that Ansible has.
 For instance, Ansible can leverage web services for dynamic inventory.
 Ansible also has many more advanced features when it comes to protecting information that can be stored in variables and their playbooks.
 
-4.3. Modules
+4.4. Modules
 ------------
 
 Modules are probably the biggest enhancement over other tools.
