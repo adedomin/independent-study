@@ -342,7 +342,7 @@ The final result is an index.js file which can be executed without any dependenc
 
 ### 4.2.2. Advantages
 
-The advantage jscomposer has over how ansible code generates is that it gives users control on the flow of execution.
+The advantage jscomposer has, over how ansible orchestrates modules, is that it gives users control on the flow of execution.
 To have a similar level a control, you have to use synchronous Ansible modules[@ansible].
 Users can use the native jscomposer modules like parallel and serial to dictate strictly how to execute the code.
 This is unlike ansible which requires users to use pre, post, tasks and handlers to give a similar benefit.
@@ -391,18 +391,11 @@ tasks:
 
 Currently, there are limited modules in automatejs which is why the shell module[^on-shell-mod] is used so much.
 However, this example demonstrates what can be accomplished with automatejs.
-Unlike a pure shell script, for instance, there is no easy mechanism to fill out templates in shells.
-This alone makes it superior.
+Pure shell scripts would struggle with populating templates, where NodeJS template string makes it very easy;
+this alone makes it superior.
 It is also purely asynchronous, so while the configuration is being written, the npm module could be downloading and installing a server application, called ezios.
 
 [^on-shell-mod]: Note that the shell module is highly unlikely to be portable between Windows and GNU/Linux systems, however portable replacements can be made by the community.
-
-Systemd-helper is another module which creates service files.
-It was designed to be used as a standalone command-driven module, but because of how simple automatejs's plugin system is, a simple callack function like systemd-helper/create.js can be leveraged directly.
-
-As explained, serial and parallel modules that are built into jscomposer give a higher level control of the flow of execution. 
-This allows for crucial tasks, like creating the user and the directory to be done before anything is installed.
-Contrast this with the use of pre-tasks and post-tasks in other tools like automatejs.
 
 4.3. automatejs
 ---------------
@@ -414,27 +407,39 @@ This JavaScript file can then be deployed using ssh to applicable hosts.
 
 However, it lacks many features that Ansible has.
 For instance, Ansible can leverage web services for dynamic inventory.
-Ansible also has many more advanced features when it comes to protecting information that can be stored in variables and their playbooks.
+Ansible also has many more advanced features when it comes to protecting information that can be stored in variables and their playbooks;
+these are called Ansible Vault files.
 
 4.4. Modules
 ------------
 
 Modules are probably the biggest enhancement over other tools.
 Virtually any asynchronous function works with AutomateJS.
-Modules are merely functions which accept a JavaScript object of arguments and a callback which has an error parameter and a result value.
+Modules are merely functions which accept a JavaScript object of arguments, and a callback function--which takes an error parameter and a result parameter.
 
 ```javascript
 // include anything!
 // browserify will package anything that
 // is not a standard library module!
+
 var spawn = require('child_process').spawn
 
-// basic module
+// basic module which changes the system's time
+// you can pretty much do anything with the
+// arguments, it's a free for all
+
 module.exports = (args, cb) => {
+
     // check if datetime argument exists
+
     if (args.time) {
+
         // change the time
+
         var cmd = spawn('date', ['-s', args.time])
+
+        // spawn is async
+
         cmd.on('close', (code) => {
             if (code > 0) {
                 return cb('exit code is greater than zero', {
@@ -442,8 +447,10 @@ module.exports = (args, cb) => {
                     changed: false
                 })
             }
+
             // a non null first parameter indicates
             // an error
+            
             cb(null, {
                 time: args.time,
                 changed: true
@@ -454,13 +461,14 @@ module.exports = (args, cb) => {
 
     // default behavior, no params
     // do nothing
+
     cb(null, { time: new Date() })
 }
 ```
 
-Above demonstrates a perfectly valid module which outputs the time when given no parameters or the time given as an argument with a boolean set to indicate it was changed.
+Above demonstrates a perfectly valid module which outputs the time when given no parameters or will change the system's time with the given parameter.
 This demonstrates the simplicity of the system.
-Ansible requires a little bit more, which requires the program to be aware of an arguments file or must leverage the Ansible python library.
+Ansible requires a little bit more, which requires the program to be aware of an arguments file and how to parse it.
 
 ### 4.4.1. Comparison to Ansible
 
@@ -551,20 +559,20 @@ print json.dumps({
 The above is an example from Ansible's own documentation site[@ansible].
 This above module is functionally equivalent to the AutomateJS one shown earlier.
 Right away there are many disadvantages to this module.
-For instance, this module needs to process its arguments[^ansible-libs]--given in some file, where AutomateJS simply hands the module a JavaScript object, denoted as tree.
+For instance, this module needs to process its arguments[^ansible-libs]--given in some file, where AutomateJS simply hands the module a JavaScript object--denoted as *tree*.
 
 [^ansible-libs]: Ansible offers some libraries that developers can use that takes away most of the headaches of dealing with arguments and argument files. see: <http://docs.ansible.com/ansible/dev_guide/developing_modules.html> 
 
-Also note the import statements in this module example and the comments given.
+Also note the comments given above the *import* statements.
 Unlike AutomateJS, Ansible modules are strongly encouraged to adhere to the python standard library.
-This is because those python modules may not be available.
-Browserify really pulls through for AutomateJS here, because literally any module--ignoring ones which leverage node-gyp and C++ code[^node-ffi], will be bundled with the module.
+This is because those python modules may not be available on target machines.
+Browserify really pulls through for AutomateJS here, because virtually any module--ignoring ones which leverage node-gyp and C++ code[^node-ffi], will be bundled with the module.
 
 [^node-ffi]: Some NodeJS developers leverage a tool called node-gyp which builds C++ code and allows linking to JavaScript; this can allow developers to make use of C++ libraries like sqlite3, leveldb, etc.
 
-Overall, the design of AutomateJS enables very easy module development.
-This beats out Ansible as the AutomateJS equivalents can be made much faster.
+AutomateJS modules are easier to create.
 AutomateJS modules can also use numerous libraries that are available on <https://www.npmjs.com>.
+This surpasses Ansible in various ways.
 
 5. Discussion
 =============
@@ -574,22 +582,17 @@ Like many other tools before it, AutomateJS solves basic automation jobs.
 5.1. Related Works
 ------------------
 
-AutomateJS has a few advantages over other tools in its space.
-Being made with composable modules and the power of NodeJS module system.
+AutomateJS has a few advantages over other tools in the Continuous Integration and Continuous Deployment space.
+AutomateJS modules are easy to develop and can easily require external library dependencies.
 It also offers a new feature, the ability to control the flow of execution.
 
-Unlike all of the tools in the space, jscomposer allows for AutomateJS to control the order of execution.
-Most other tools use pre-tasks, post-tasks and task segregation.
-However, this doesn't always work for all dependency related issues.
-jscomposer provides features like the serial module which means that the modules in it must be executed in order.
-The parallel module does the opposite allowing for tasks to be executed in any order.
+Unlike all of the tools in the space, jscomposer allows for AutomateJS to finely control the order of execution.
+For instance, jscomposer provides the serial module which ensures execution of modules will occur in order.
+The parallel module does the opposite allowing for modules under it to be executed and to return a result in any order.
 
 In terms of Ansible, AutomateJS makes it easier to create modules.
 As shown earlier, to make a valid module, it just has to implement a very basic function.
 Unlike Ansible though, AutomateJS does not have a large and encompassing set of standard modules.
-
-Package Managers are generally only limited to common, off the shelf software.
-In many cases, a user of AutomateJS may want to install certain software from these tools.
 
 5.2. Limitations
 ----------------
@@ -605,10 +608,9 @@ Because tasks can be executed in a specific order, the mechanism may not be requ
 The other feature it is lacking is nested tasks;
 tools like Ansible call these roles, which are basically sub-playbooks with their own variables and modules.
 
-The core modules are also lacking in features.
-The file module copies files, but does not give users the ability to set owner or mode of the file.
-This could be implemented however.
-Because this project has really started, many of the example scripts abuse the shell module, which is not much better than using shell scripts.
+The core modules are also lacking;
+basic operations, such as working with Operating System services, is not yet possible.
+Because this project has really started, many of the example scripts abuse the shell module, which is not much better than using shell scripts directly.
 
 Unlike Python, NodeJS is not a common package that comes pre-installed on many Linux or BSD installations.
 So unlike Ansible, to utilize AutomateJS, a user must ensure NodeJS is installed on the system.
@@ -617,12 +619,11 @@ So unlike Ansible, to utilize AutomateJS, a user must ensure NodeJS is installed
 ----------------
 
 Because of the limitations, the next steps are to explore building a wrapper around Ansible.
-Because of Ansible's rich features and modules systems, it would be ideal to leverage that instead of re implementing all its features in AutomateJS.
+Ansible is simply more mature;
+Utilizing Ansible's core features could accelerate AutomateJS development.
+This way many features would not need to be reinvented.
 
-Because AutomateJS does not have roles, a helper tool should be made that can turn a subset of tasks with variables, into a module that can be npm installed or required.
-
-Dynamic inventory should be a simple addition that could be made.
-Basically the feature requires the user to provide a binary that takes host label and outputs a json object.
+Because AutomateJS does not have roles, a helper tool should be made that can turn a subset of tasks with variables, into a module that can be *npm installed* or can be required using *require()* calls.
 
 6. Conclusion
 =============
