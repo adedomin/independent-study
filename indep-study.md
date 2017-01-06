@@ -266,9 +266,9 @@ At a top level, metadata is defined, basically what this runbook does.
 The *hosts* value determines what machine or machines this script runs against.
 The most important item in the runbook is the *tasks*.
 This item contains all of the steps a runbook must execute.
-Inside the tasks, each *- name* and *module-name* pair is a single module.
+Inside the tasks, each *- name* and *module-name* pair are a single module.
 The *name* item is a unique string that identifies the step.
-the *module-name*--like shell or file, contain a nested object which are the module's parameters.
+the *module-name* contain a nested object which are the module's parameters.
 The *echo* module's argument shows off another feature of runbooks, templating.
 The value of *\${echo_value}* is provided at runtime, allowing the runbook to be more reusable.
 
