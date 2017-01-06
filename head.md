@@ -16,8 +16,11 @@
 
 title: "AutomateJS: CICD and CM Tool"
 abstract: |
-    *To be written.*
-
+  *Dev Ops, CICD and Agile workplaces require fast delivery to market.*
+  *To achieve this, developers and system administrators need advanced, cross-platform automation tools.*
+  *This paper is concerned with a new automation tool that attempts to directly compete with Ansible.*
+  *It does this by having a module system that is easy to develop for, but also having tighter controls over the flow of execution.*
+  *Automation frameworks could greatly benefit by implementing these features.*
 papersize: letter
 geometry: margin=2cm
 fontfamily: mathpazo
