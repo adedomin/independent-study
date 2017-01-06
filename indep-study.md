@@ -49,18 +49,18 @@ One must also include the Ansible library in the module to process the arguments
 ### 1.1.1. Ansible
 
 Ansible is one of the most popular tools in the space.
-This is because unlike its predecessors, Ansible uses an agentless[^agentless] architecture.
+This is because unlike its predecessors, Ansible uses an agent-less[^agentless] architecture.
 Thus Ansible can work on any GNU/Linux machine running an SSH daemon and have Python 2.x installed.
 Ansible, like other tools in the space, uses a playbook to orchestrate what modules to run on what machines.
 An inventory file, in an INI file format, tell Ansible what group of servers are associated with a particular label [@ansible].
 
-[^agentless]: Agentless means that when an Ansible playbook is not being executed on a target machine, the machine does not waste resources running Ansible in the background.
+[^agentless]: Agent-less means that when an Ansible playbook is not being executed on a target machine, the machine does not waste resources running Ansible in the background.
 
 ### 1.1.2. Puppet
 
-Puppet is a tool that is very similar to Ansible, however puppet is dependent on a backend service--like Foreman, to function properly[@puppet].
+Puppet is a tool that is very similar to Ansible, however puppet is dependent on a back-end service--like Foreman, to function properly[@puppet].
 For the most part, Ansible is slowly supplanting Puppet from the CI space.
-This is due to variety of reasons, primarily because Ansible is agentless[@lessons-ansible].
+This is due to variety of reasons, primarily because Ansible is agent-less[@lessons-ansible].
 
 ### 1.1.3. Package Managers
 
@@ -89,7 +89,7 @@ It will also briefly describe the technologies which enable this tool to functio
 2.1. Continuous Integration and Continuous Deployment
 -----------------------------------------------------
 
-CICD is the process of accelerating the building, testing and installation of applications to end servers .
+CICD--Continuous Integration and Continuous Deployment, is the process of accelerating the building, testing and installation of applications to end servers .
 In a world where web technology moves fast and new features are ideal, it's critical to go to market fast.
 To do this there are two major architectures that are used.
 
@@ -123,7 +123,7 @@ The remote shells are no different than conventional user-controlled shells.
 
 There are various tools and servers that do this; a few examples are Ansible, uDeploy and Puppet.
 Ansible uses remote shell protocols, such as secure shell (ssh), to execute a set of instructions written in yaml, generally with the intent of installing some type of software[@ansible].
-uDeploy is similar in how it causes change on target machines, using secure shell; however uDeploy generally requires the target machines to be running some kind of daemon; this also means it is not strictly *agentless* like Ansible.
+uDeploy is similar in how it causes change on target machines, using secure shell; however uDeploy generally requires the target machines to be running some kind of daemon; this also means it is not strictly *agent-less* like Ansible.
 
 Many POSIX-like systems make use of package management to deliver software.
 Packages, like .deb's and .rpm's, are a collection of installation shell scripts, including pre-installation and post-installation, and a binary or source code.
@@ -182,7 +182,7 @@ It had also created a flood of tools and libraries that make it a suitable langu
 
 ### 2.2.2. JavaScript Backwards Compatibility
 
-Unlike the transition from Python 2.x to Python 3.x, JavaScript ECMA6 and ECMA5 are completely backwards compatible.
+Unlike the transition from Python 2.x to Python 3.x, JavaScript ECMAScript 6 and ECMAScript 5 are completely backwards compatible.
 The advantage of this is that users of JavaScript do not need to worry about communities splitting by newer JavaScript releases.
 Even methods which are considered bad practice, like *with()*--a function from very early versions of JavaScript, are still in the language.
 
@@ -211,7 +211,7 @@ This is to prevent dependency problems.
 Without this, many of these tools have to run in a slower, synchronous[^why-slow] mode.
 For instance, Ansible to guarantee the order of execution, many Ansible modules must be put in synchronous mode[@ansible].
 
-[^why-slow]: Syncronous means that the tool has to wait for a task to fully complete before beginning another, which can be slower for I/O tasks; which may have to wait for the Operating System to read or write files.
+[^why-slow]: Synchronous means that the tool has to wait for a task to fully complete before beginning another, which can be slower for I/O tasks; which may have to wait for the Operating System to read or write files.
 
 Ideally AutomateJS will allow for users to dictate which collection of modules must occur in order or can occur in parallel, whether they are asynchronous or not.
 
@@ -262,7 +262,7 @@ tasks:
 
 Above is an example runbook.
 It shows all of the crucial features and core modules at work.
-At a top level, metadata is defined, basically what this runbook does.
+At a top level, meta-data is defined, basically what this runbook does.
 The *hosts* value determines what machine or machines this script runs against.
 The most important item in the runbook is the *tasks*.
 This item contains all of the steps a runbook must execute.
@@ -270,7 +270,7 @@ Inside the tasks, each *- name* and *module-name* pair are a single module.
 The *name* item is a unique string that identifies the step.
 the *module-name* contain a nested object which are the module's parameters.
 The *echo* module's argument shows off another feature of runbooks, templating.
-The value of *\${echo_value}* is provided at runtime, allowing the runbook to be more reusable.
+The value of *\${echo_value}* is provided at run-time, allowing the runbook to be more reusable.
 
 ### 4.1.2. Comparison to Ansible
 
@@ -304,8 +304,8 @@ This allows separating tasks that are commonly ran multiple times and only execu
 Because AutomateJS has *serial* and *parallel* modules, it doesn't really require such constructs.
 Tasks that mutate a service--in this ansible example httpd, can be grouped together in a serial module  with the httpd restart being the last module.
 
-A more complete example[^complete-example] shows off features like *pretask* and *posttask*.
-They would also show how ansible uses double curly brackets--*{{var}}*, to template variables into the playbook at runtime.
+A more complete example[^complete-example] shows off features like *pre-task* and *post-task*.
+They would also show how Ansible uses double curly brackets--*{{var}}*, to template variables into the playbook at run-time.
 
 [^complete-example]: Too large to reasonably include: <https://gist.github.com/marktheunissen/2979474>
 
@@ -325,7 +325,7 @@ This is because the code is not executed by the tool, but by the target hosts.
 ![How jscomposer is used in AutomateJS](media/browserify.png)
 
 Figure 3 better shows how AutomateJS makes use of jscomposer and its key importance.
-A user's runbook, which is the run.yml file, is converted into a javascript object.
+A user's runbook, which is the run.yml file, is converted into a JavaScript object.
 That object is passed into jscomposer, which is a function that returns a source code string.
 jscomposer generates code that uses the async[^async-info] library;
 this library is what enables AutomateJS to control the execution flow of asynchronous modules.
@@ -342,10 +342,10 @@ The final result is an index.js file which can be executed without any dependenc
 
 ### 4.2.2. Advantages
 
-The advantage jscomposer has, over how ansible orchestrates modules, is that it gives users control on the flow of execution.
+The advantage jscomposer has, over how Ansible orchestrates modules, is that it gives users control on the flow of execution.
 To have a similar level a control, you have to use synchronous Ansible modules[@ansible].
 Users can use the native jscomposer modules like parallel and serial to dictate strictly how to execute the code.
-This is unlike ansible which requires users to use pre, post, tasks and handlers to give a similar benefit.
+This is unlike Ansible which requires users to use pre, post, tasks and handlers to give a similar benefit.
 
 Below is an example of how one can use jscomposer to create a JavaScript file that will install ezios[^ezios-loc]--a web application available on npm.
 
@@ -353,7 +353,7 @@ Below is an example of how one can use jscomposer to create a JavaScript file th
 
 ```yaml
 # flow control
-# install app example
+# ezios installation workflow
 tasks:
 - name: 'install app'
   serial:
@@ -367,7 +367,7 @@ tasks:
     parallel:
     - name: 'install application'
       shell: 'npm install -g ezios'
-    - name: 'configure applcation'
+    - name: 'configure application'
       template:
         source: ezios.config.js
         destination: /home/ezios/.mon.js
@@ -426,7 +426,7 @@ var spawn = require('child_process').spawn
 
 // basic module which changes the system's time
 // you can pretty much do anything with the
-// arguments, it's a free for all
+// arguments, it is a free for all
 
 module.exports = (args, cb) => {
 
@@ -601,7 +601,7 @@ AutomateJS is lacking in many features.
 For instance, it doesn't have a dynamic inventory system like Ansible.
 The SSH transport is not as mature as Ansible.
 It depends on private key authentication only.
-It also doesn't work with sudo when a password is required, primarily because of the overhead of a pseudo-tty garbling output.
+It also doesn't work with sudo when a password is required, primarily because of the overhead of a pseudo-TTY garbling output.
 
 AutomateJS does not provide a handler mechanism like many other tools.
 Because tasks can be executed in a specific order, the mechanism may not be required.
