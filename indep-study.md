@@ -495,8 +495,10 @@ Basically the feature requires the user to provide a binary that takes host labe
 6. Conclusion
 =============
 
-Because of the limitations of shells and other OS tools and features, many automation tools were made.
-These tools were made to allow for building projects andaccelerated delivery of these projects to back-end services.
-AutomateJS adds some unique features over other tools in its space.
-It is able to execute a set of commands in a defined order.
-It modules use basic NodeJS conventions, making ti very eay to create or adapt prior works to be usable by AutomateJS.
+Because of the limitations of shells and other Operating System tools and features, many automation tools were made.
+These tools were made to allow for building projects and accelerated delivery of these projects to back-end services; this is what modern day Continuous Integration and Continuous Deployment looks like.
+AutomateJS adds some unique features over other tools in the Continuous Integration and Continuous Deployment space.
+It is able to execute a set of commands in a defined order, even if they are asynchronous.
+Modules use basic NodeJS callback conventions, making it very eay to create or adapt prior works to be usable by AutomateJS.
+Ultimately anyone looking to construct newer tools to solve problems in this space should consider JavaScript;
+they should also consider adding modules like AutomateJS's *serial* and *parallel* ones.
