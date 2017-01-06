@@ -1,0 +1,10 @@
+digraph browserifygraph {
+    rankdir=LR;
+
+    runbook_tasks -> jscomposer;
+    jscomposer -> source_code [label="generate code"];
+    source_code -> browserify;
+    browserify -> node_modules [label="resolve require()"];
+    async -> jscomposer [label="flow control"];
+    browserify -> index_js [label="bundled source file"];
+}

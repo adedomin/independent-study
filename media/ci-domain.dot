@@ -1,0 +1,17 @@
+digraph cidomain {
+    
+    rankdir=RL;
+    newrank=true;
+
+    { rankdir=TB; DSL shell_script; } -> 
+    { rankdir=TB services build_tools software_libraries } [style=invis];
+    DSL -> shell_script [label="creates"];
+    shell_script -> build_tools [label="invokes"];
+    build_tools -> software_libraries [label="aquires"]; 
+    software_libraries -> build [label="depends"];
+    build_tools -> build [label="builds"];
+    shell_script -> build [label="test"];
+    DSL -> services [label="finds and provides"];
+    DSL -> build_tools [label="finds and provides"];
+    build -> services [label="uses"];
+}

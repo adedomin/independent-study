@@ -1,0 +1,19 @@
+digraph ci { 
+    
+    rankdir=LR;
+    subgraph cluster_ci {
+        label = "Continuous Integration";
+        devs -> scm [label="commit changes"];
+        scm -> remote_scm_repo [label="push changes"];
+        remote_scm_repo -> build_server [label="poll for changes"];
+        build_server -> devs [label="reporting, unit/mock test results"];
+        {rank=same rankdir=TB scm devs remote_scm_repo};
+    }
+    subgraph cluster_cd {
+        label = "Continuous Deployment";
+        build_server -> binary_repo [label="built"];
+        build_server -> package_repo [label="tested (scripting)"];
+        {rank=same rankdir=TB binary_repo package_repo};
+    }
+
+}

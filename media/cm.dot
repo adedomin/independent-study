@@ -1,0 +1,24 @@
+digraph cm {
+
+    rankdir=LR;
+    newrank=true;
+
+    config_db [shape=cylinder];
+
+    subgraph cluster_from {
+        label="from ast";
+        config_ast -> generator;
+        generator -> configs;
+        configs -> install_loc;
+    }
+
+    subgraph cluster_to {
+        label="to ast";
+        a_config -> parser;
+        parser -> a_config_ast;
+    }
+
+    { rank=same; rankdir=TB config_ast a_config; }
+    a_config_ast -> config_db [ltail=cluster_to]; 
+    config_db -> config_ast [lhead=cluster_from];
+}

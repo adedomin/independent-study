@@ -1,0 +1,21 @@
+digraph agraph {
+	master -> slave1 [dir="both"];
+	master -> slave2 [dir="both"];
+	master -> slave3 [dir="both"];
+	master -> slave4 [dir="both"];
+	master -> slave5 [dir="both"];
+	master -> slave6 [dir="both"];
+	master -> slave7 [dir="both"];
+	master -> slave8 [dir="both"];
+	slave1 -> binary_repo;
+	slave2 -> binary_repo;
+	slave3 -> binary_repo;
+	slave4 -> binary_repo;
+	slave5 -> binary_repo;
+	slave6 -> binary_repo;
+	slave7 -> binary_repo;
+	slave8 -> binary_repo;
+
+    {rank=same slave1 slave2 slave3 slave4} 
+    -> {rank=same slave5 slave6 slave7 slave8} [style=invis];
+}

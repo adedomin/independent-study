@@ -106,6 +106,9 @@ Other such triggers, like diff checking, can be used to trigger code reviews for
 Generally, the final stage of Continuous Integration is to notify the developers, or other interested parties, the results of these various tests and builds[@jenkins].
 In a full CICD build pipeline, generally there is the process of uploading so called artifacts to a artifact or binary repository.
 These binary repositories are more in the realm of continuous delivery.
+Figure 1 shows these processes in action
+
+![An example Continuous Integration Workflow](media/ci.png)
 
 Continuous delivery also has it's share of tools and structure.
 One of the first requirements of continuous delivery is having some form of binary repository.
@@ -132,6 +135,13 @@ In an environment with fixed inventory, it might not be ideal to do things like 
 However in an environment where machines can be spun up at whim, or even automatically, it wouldn't matter as much; in such cases one would simply destroy and create a new machine for every deployment[@lessons-ansible].
 In a fixed architecture, it might be ideal to stick to package management solutions for delivering binaries.
 This way changes are cleanly tracked and handled using battle-tested tools and technologies.
+
+![Example Continuous Deployment setup](media/cd.png)
+
+Figure 2 shows a typical uDeploy setup.
+A master server orchestrates actions to be take against numerous machines; 
+generally the machines fetch the binaries they need to install from an artifact repository. 
+Master can be triggered to action by the CI system as well.
 
 2.2. JavaScript, NodeJS and other Technologies
 -----------------------------------------------
@@ -210,11 +220,35 @@ This section will concern itself with features of the tool, AutomateJS, how it w
 4.1. jscomposer
 ---------------
 
+
 The function jscomposer is what generates the code automatejs uses.
 Code generation, in this way, better suits how automatejs works.
 This is because the code is not executed by the tool, but by the target hosts.
 
+### 4.1.1. How it Works
+
+![How jscomposer is used in AutomateJS](media/browserify.png)
+
+Figure 3 better shows how AutomateJS makes use of jscomposer and its key importance.
+A user's runbook, which is the run.yml file, is converted into a javascript object.
+That object is passed into jscomposer, which is a function that returns a source code string.
+jscomposer generates code that uses the async[^async-info] library;
+this library is what enables AutomateJS to control the execution flow of asynchronous modules.
+
+[^async-info]: see: <https://github.com/caolan/async>
+
+jscomposer uses ECMAScript 6 template strings to convert the runbook tree into a source code.
+The source code generator does not insert library or module code in the source; 
+it instead inserts *require('module-name')* calls in their place.
+
+Browserify then comes into play, where it parses this generated source code into an abstract syntax tree;
+It then finds all the *require()* calls and begins finding the referenced modules and shoves them into the final source code.
+The final result is an index.js file which can be executed without any dependencies on any system with NodeJS.
+
+### 4.1.2. Advantages
+
 The advantage jscomposer has over how ansible code generates is that it gives users control on the flow of execution.
+To have a similar level a control, you have to use synchronous Ansible modules[@ansible].
 Users can use the native jscomposer modules like parallel and serial to dictate strictly how to execute the code.
 This is unlike ansible which requires users to use pre, post, tasks and handlers to give a similar benefit.
 
