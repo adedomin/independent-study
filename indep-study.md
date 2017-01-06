@@ -217,15 +217,106 @@ In order to guarantee a proper flow of execution, many Ansible modules must be p
 
 This section will concern itself with features of the tool, AutomateJS, how it works and how it compares with Ansible.
 
-4.1. jscomposer
----------------
+4.1. Runbooks
+-------------
 
+Runbooks are what tell AutomateJS what to do.
+They make use of YAML file format;
+The advantage of this file format is its human readability over more machine oriented documents like JSON or XML.
+Ansible uses the same file format for their playbooks.
+
+### 4.1.1. How it Works
+
+```yaml
+name: 'example'
+description: 'example runbook'
+hosts: ${host}
+sudo: true
+
+tasks:
+- name: echo1
+  echo: ${echo_value}
+- name: serial test
+  serial:
+  - name: copy file
+    file:
+      source: somefile.files
+      destination: '/root/asdf'
+      mode: '0400'
+      owner: 1003
+  - name: shell
+    shell: 'cat /root/asdf'
+- name: test template
+  template:
+    source: 'some-template.js'
+    destination: '/root/blah'
+    mode: '0400'
+    owner: 1003
+    variables:
+      name: 'Anthony'
+```
+
+Above is an example runbook.
+It shows all of the crucial features and core modules at work.
+At a top level, metadata is defined, basically what this runbook does.
+The *hosts* value determines what machine or machines this script runs against.
+The most important item in the runbook is the *tasks*.
+This item contains all of the steps a runbook must execute.
+Inside the tasks, each *- name* and *module-name* pair is a single module.
+The *name* item is a unique string that identifies the step.
+the *module-name*--like shell or file, contain a nested object which are the module's parameters.
+The *echo* module's argument shows off another feature of runbooks, templating.
+The value of *\${echo_value}* is provided at runtime, allowing the runbook to be more reusable.
+
+### 4.1.2. Comparison to Ansible
+
+```yaml
+---
+- hosts: webservers
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: ensure apache is at the latest version
+    yum: name=httpd state=latest
+  - name: write the apache config file
+    template: src=/srv/httpd.j2 dest=/etc/httpd.conf
+    notify:
+    - restart apache
+  - name: ensure apache is running (and enable it at boot)
+    service: name=httpd state=started enabled=yes
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted
+```
+
+For the most part, runbooks aren't entirely different from the example Ansible playbook shown above[@ansible].
+The key difference is that Ansible playbooks can contain different set of tasks to execute for different hosts.
+This is why *hosts* item is the top level item of a playbook.
+
+Ansible also shows off more of its features here, such as the handlers and notify objects in the playbook.
+This allows separating tasks that are commonly ran multiple times and only execute them once all other tasks are done.
+Because AutomateJS has *serial* and *parallel* modules, it doesn't really require such constructs.
+Tasks that mutate a service--in this ansible example httpd, can be grouped together in a serial module  with the httpd restart being the last module.
+
+A more complete example[^complete-example] shows off features like *pretask* and *posttask*.
+They would also show how ansible uses double curly brackets--*{{var}}*, to template variables into the playbook at runtime.
+
+[^complete-example]: Too large to reasonably include: <https://gist.github.com/marktheunissen/2979474>
+
+Ansible shows off its maturity and completeness in this example.
+AutomateJS had some decent advantages, primarily the *serial* and *parallel* module.
+Overall though, runbooks have less features than playbooks.
+
+4.2. jscomposer
+---------------
 
 The function jscomposer is what generates the code automatejs uses.
 Code generation, in this way, better suits how automatejs works.
 This is because the code is not executed by the tool, but by the target hosts.
 
-### 4.1.1. How it Works
+### 4.2.1. How it Works
 
 ![How jscomposer is used in AutomateJS](media/browserify.png)
 
@@ -245,7 +336,7 @@ Browserify then comes into play, where it parses this generated source code into
 It then finds all the *require()* calls and begins finding the referenced modules and shoves them into the final source code.
 The final result is an index.js file which can be executed without any dependencies on any system with NodeJS.
 
-### 4.1.2. Advantages
+### 4.2.2. Advantages
 
 The advantage jscomposer has over how ansible code generates is that it gives users control on the flow of execution.
 To have a similar level a control, you have to use synchronous Ansible modules[@ansible].
