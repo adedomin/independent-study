@@ -13,14 +13,14 @@
 #    pandoc 
 #    pandoc-citeproc
 
-title: "AutomateJS: CICD and CM Tool"
+title: "devops-foundry: Multi-purpose DevOps tool"
 abstract: |
   *Dev Ops, CICD and Agile workplaces require fast delivery to market.*
   *To achieve this, developers and system administrators need advanced, cross-platform automation tools.*
-  *This paper is concerned with a new automation tool that attempts to directly compete with Ansible.*
-  *It does this by having a module system that is easy to develop for and also features a tighter control over the flow of execution.*
+  *This paper is concerned with a new automation tool that attempts to address limitations of Ansible.*
+  *This is accomplished having a module system that is easy to develop for and allows for finer control over the flow of execution.*
   *Automation frameworks could greatly benefit by implementing these features.*
-  *This is demonstrated by comparing AutomateJS to Ansible.*
+  *This is demonstrated by comparing DevOps-FoundryJS to Ansible.*
 papersize: letter
 geometry: margin=2cm
 fontfamily: mathpazo
